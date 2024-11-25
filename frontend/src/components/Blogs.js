@@ -76,7 +76,7 @@ const Blogs = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/blog");
+        const res = await axios.get("https://snapwanderer-mern.onrender.com/api/blog");
         setBlogs(res.data.blogs);
       } catch (error) {
         console.log("Error fetching blogs:", error);
