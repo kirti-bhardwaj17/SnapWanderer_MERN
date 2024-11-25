@@ -9,14 +9,13 @@ const UserBlogs = () => {
 
   const id = localStorage.getItem("userId");
 
-  // Ensure the API request function is stable with useCallback
+  // Stabilize the API request function
   const sendRequest = useCallback(async () => {
     if (!id) {
       setError("No user ID found. Please log in again.");
       setLoading(false);
       return;
     }
-
     try {
       const res = await axios.get(`https://snapwanderer-mern.onrender.com/api/blog/user/${id}`);
       return res.data;
@@ -33,7 +32,7 @@ const UserBlogs = () => {
       }
       setLoading(false);
     });
-  }, [sendRequest]);
+  }, [sendRequest]); // Include sendRequest as a dependency
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
