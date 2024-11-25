@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Blog from './Blog';
 
@@ -9,7 +9,8 @@ const UserBlogs = () => {
 
   const id = localStorage.getItem("userId");
 
-  const sendRequest = async () => {
+  // Memoizing sendRequest function to prevent re-creation on each render
+  const sendRequest = useCallback(async () => {
     try {
       const res = await axios.get(`https://snapwanderer-mern.onrender.com/api/blog/user/${id}`);
       return res.data;
@@ -17,7 +18,7 @@ const UserBlogs = () => {
       setError('Error fetching blogs. Please try again later.');
       console.log(err);
     }
-  };
+  }, [id]);  // Add `id` to dependencies
 
   useEffect(() => {
     sendRequest().then((data) => {
@@ -26,7 +27,7 @@ const UserBlogs = () => {
       }
       setLoading(false);
     });
-  }, []);
+  }, [sendRequest]);  // Dependency array ensures this runs only once or when `sendRequest` changes
 
   if (loading) return <div>Loading...</div>;  // Display loading indicator while data is fetched
   if (error) return <div>{error}</div>;  // Display error message if there's an issue
