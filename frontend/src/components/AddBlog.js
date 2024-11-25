@@ -133,7 +133,7 @@ const AddBlog = () => {
 
   const sendRequest = async () => {
     try {
-      const res = await axios.post("http://localhost:4000/api/blog/add", {
+      const res = await axios.post("https://snapwanderer-mern.onrender.com/api/blog/add", {
         title: inputs.title,
         description: inputs.description,
         image: inputs.imageURL,
