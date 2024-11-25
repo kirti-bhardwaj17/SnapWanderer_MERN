@@ -3,14 +3,20 @@ import axios from 'axios';
 import Blog from './Blog';
 
 const UserBlogs = () => {
-  const [user, setUser] = useState(null);  // Initialize as null
-  const [loading, setLoading] = useState(true);  // Loading state to show loading indicator
-  const [error, setError] = useState(null);    // Error state
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const id = localStorage.getItem("userId");
 
-  // Memoizing sendRequest function to prevent re-creation on each render
+  // Ensure the API request function is stable with useCallback
   const sendRequest = useCallback(async () => {
+    if (!id) {
+      setError("No user ID found. Please log in again.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await axios.get(`https://snapwanderer-mern.onrender.com/api/blog/user/${id}`);
       return res.data;
@@ -18,7 +24,7 @@ const UserBlogs = () => {
       setError('Error fetching blogs. Please try again later.');
       console.log(err);
     }
-  }, [id]);  // Add `id` to dependencies
+  }, [id]);
 
   useEffect(() => {
     sendRequest().then((data) => {
@@ -27,10 +33,10 @@ const UserBlogs = () => {
       }
       setLoading(false);
     });
-  }, [sendRequest]);  // Dependency array ensures this runs only once or when `sendRequest` changes
+  }, [sendRequest]);
 
-  if (loading) return <div>Loading...</div>;  // Display loading indicator while data is fetched
-  if (error) return <div>{error}</div>;  // Display error message if there's an issue
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div>
@@ -47,7 +53,7 @@ const UserBlogs = () => {
           />
         ))
       ) : (
-        <div>No blogs available</div>  // Message when the user has no blogs
+        <div>No blogs available</div>
       )}
     </div>
   );
