@@ -4,7 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
 const LandingPage = () => { 
-  const isLoggedIn = useSelector(state=> state.isLoggedIn);
+  const isLoggedIn = useSelector(state => state.isLoggedIn);
+
   return (
     <div style={{ position: 'relative', minHeight: '100vh' }}>
       <video autoPlay muted loop style={{ position: 'absolute', width: '100%', height: '63%', objectFit: 'cover' }}>
@@ -17,9 +18,19 @@ const LandingPage = () => {
         <Typography variant="body1" paragraph sx={{ color:"#A7ABDD", fontSize:"20px", fontFamily:"cursive" }}>
           Your ultimate destination for travel inspiration, tips, and stories.
         </Typography>
-        {!isLoggedIn ? (<Button component={RouterLink} to="/auth" variant="contained" sx={{ margin: 1, borderRadius: 10, bgcolor: "#62B6CB", width: "200px", height: "50px", textDecoration: 'none' }}>Explore Blog</Button>) : (<Button component={RouterLink} to="/blogs" variant="contained" sx={{ margin: 1, borderRadius: 10, bgcolor: "#62B6CB", width: "200px", height: "50px", textDecoration: 'none' }}>Explore Blog</Button>) }
+        
+        {/* Explore Blog Button - Dynamic Based on Login Status */}
+        <Button
+          component={RouterLink}
+          to={isLoggedIn ? "/blogs" : "/auth"} // Redirect to /blogs if logged in, else /auth
+          variant="contained"
+          sx={{ margin: 1, borderRadius: 10, bgcolor: "#62B6CB", width: "200px", height: "50px", textDecoration: 'none' }}
+        >
+          Explore Blog
+        </Button>
       </Container>
-      
+
+      {/* About Us Section */}
       <Container maxWidth="vw" style={{ position: 'relative', zIndex: 1, textAlign: 'center', paddingTop: '20px', paddingBottom: '20px', color: '#fff', height: '480px', marginTop: '100px', backgroundImage: 'url(https://i.pinimg.com/474x/86/08/e5/8608e5b56fad88ada928cf940c883d62.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <Typography variant="h4" gutterBottom style={{ fontSize: '2.5rem', color:"#001524", fontFamily:'revert-layer' }}>About Us</Typography>
         <Grid container spacing={4} justifyContent="center">
@@ -42,6 +53,7 @@ const LandingPage = () => {
         </Grid>
       </Container>
 
+      {/* Footer */}
       <footer style={{ background: '#333', color: '#fff', padding: '20px', textAlign: 'center', position: 'relative', zIndex: 1 }}>
         <Container maxWidth="md">
           <Grid container spacing={2} justifyContent="center">
