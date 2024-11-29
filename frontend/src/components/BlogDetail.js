@@ -1,135 +1,97 @@
-import { Button, InputLabel, TextField, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Typography, Box, CircularProgress } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-
-const labelStyles = { mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" };
+import { useParams } from "react-router-dom";
 
 const BlogDetail = () => {
-  const navigate = useNavigate();
-  const [blog, setBlog] = useState(null); // State to store blog details
-  const [inputs, setInputs] = useState({}); // State for form inputs
-  const id = useParams().id; // Extract blog ID from URL
+  const [blog, setBlog] = useState(null);
+  const id = useParams().id;
 
-  // Handle input field changes
-  const handleChange = (e) => {
-    setInputs((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  // Fetch blog details from API
   const fetchDetails = async () => {
     try {
       const res = await axios.get(
         `https://snapwanderer-mern.onrender.com/api/blog/${id}`
       );
-      const data = res.data;
-      return data;
+      return res.data;
     } catch (error) {
       console.error("Failed to fetch blog details:", error);
     }
   };
 
-  // UseEffect to fetch blog details on component mount
   useEffect(() => {
     fetchDetails().then((data) => {
       if (data) {
         setBlog(data.blog);
-        setInputs({
-          title: data.blog.title,
-          description: data.blog.description,
-        });
       }
     });
   }, [id]);
 
-  // Send updated blog data to API
-  const sendRequest = async () => {
-    try {
-      const res = await axios.put(
-        `https://snapwanderer-mern.onrender.com/api/blog/update/${id}`,
-        {
-          title: inputs.title,
-          description: inputs.description,
-        }
-      );
-      return res.data;
-    } catch (error) {
-      console.error("Failed to update blog:", error);
-    }
-  };
-
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    sendRequest()
-      .then((data) => {
-        console.log("Blog updated successfully:", data);
-        navigate("/myBlogs/"); // Redirect to "My Blogs" page
-      })
-      .catch((error) => console.error("Failed to update blog:", error));
-  };
-
   return (
     <div>
       {blog ? (
-        <form onSubmit={handleSubmit}>
+        <Box
+          sx={{
+            position: "relative",
+            height: "100vh",
+            width: "100vw",
+            backgroundImage: `url('https://via.placeholder.com/1920x1080')`, // Replace with dynamic blog image
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+          }}
+        >
+          {/* Overlay */}
           <Box
-            border={3}
-            borderColor="rgba(58,75,180,1)"
-            borderRadius={10}
-            boxShadow="10px 10px 20px #ccc"
-            padding={3}
-            margin="auto"
-            marginTop={3}
-            display="flex"
-            flexDirection="column"
-            width={{ xs: "90%", sm: "80%", md: "60%" }}
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent overlay for better text contrast
+              zIndex: 1,
+            }}
+          />
+
+          {/* Blog Content */}
+          <Box
+            sx={{
+              position: "relative",
+              zIndex: 2,
+              textAlign: "center",
+              color: "white",
+              p: 3,
+              borderRadius: 2,
+              backdropFilter: "blur(5px)",
+              backgroundColor: "rgba(0, 0, 0, 0.7)", // Slightly transparent background for the content
+              maxWidth: "80%",
+              margin: "0 auto",
+            }}
           >
-            <Typography
-              fontWeight="bold"
-              padding={3}
-              color="grey"
-              variant="h4"
-              textAlign="center"
-            >
-              Edit Your Blog
+            <Typography variant="h3" fontWeight="bold" gutterBottom>
+              {blog.title}
             </Typography>
-            <InputLabel sx={labelStyles}>Title</InputLabel>
-            <TextField
-              name="title"
-              onChange={handleChange}
-              value={inputs.title || ""}
-              margin="normal"
-              variant="outlined"
-            />
-            <InputLabel sx={labelStyles}>Description</InputLabel>
-            <TextField
-              name="description"
-              onChange={handleChange}
-              value={inputs.description || ""}
-              margin="normal"
-              variant="outlined"
-              multiline
-              rows={4}
-            />
-            <Button
-              sx={{ mt: 2, borderRadius: 4 }}
-              variant="contained"
-              color="primary"
-              type="submit"
-            >
-              Submit
-            </Button>
+            <Typography variant="h5" sx={{ mt: 2 }}>
+              {blog.description}
+            </Typography>
           </Box>
-        </form>
+        </Box>
       ) : (
-        <Typography variant="h6" color="error" align="center" marginTop={5}>
-          Failed to load blog details. Please try again later.
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            width: "100vw",
+          }}
+        >
+          <CircularProgress />
+        </Box>
       )}
     </div>
   );
