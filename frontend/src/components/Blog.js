@@ -43,18 +43,19 @@ const Blog = ({ id, userName, title, description, imageURL, isUser }) => {
   };
 
   return (
+    // Wrap the entire content in a React Fragment or a single parent element to fix the syntax error
     <>
-      {/* Wrap the elements with a Fragment or a single parent element */}
+      {/* Set background color to cover the entire body of the page */}
       <Box
         sx={{
           position: "absolute",
           top: 0,
           left: 0,
           width: "100%",
-          height: "100%", // Full height of the webpage
+          minHeight: "100%", // Ensures it takes the full height of the body, even when scrolled
           backgroundColor: "#A7D8D8", // Pastel teal blue color
-          zIndex: -1, // Keep the background behind content
-          overflow: "hidden", // Prevent scrolling the background
+          zIndex: -1, // Keeps the background behind content
+          overflow: "hidden", // Prevents scrolling the background
         }}
       />
       <Box
