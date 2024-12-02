@@ -51,7 +51,7 @@ const Blog = ({ id, userName, title, description, imageURL, isUser }) => {
           left: 0,
           width: "100%",
           height: "100vh", // Full viewport height
-          backgroundImage: "url('/path-to-your-background-image.jpg')", // Update this with the actual image URL
+          backgroundImage: "url('https://i.pinimg.com/736x/47/57/a8/4757a8969c6b038cda876ed64e986c00.jpg')", // Update this with the actual image URL
           backgroundSize: "cover",
           backgroundPosition: "center",
           zIndex: -1, // Send the background behind the content
