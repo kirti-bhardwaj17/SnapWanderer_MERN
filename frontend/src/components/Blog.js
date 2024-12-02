@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  Avatar,
   Box,
   Card,
   CardContent,
@@ -8,6 +7,7 @@ import {
   CardMedia,
   IconButton,
   Typography,
+  Avatar,
   CircularProgress,
 } from "@mui/material";
 import ModeEditOutlineIcon from "@mui/icons-material/ModeEditOutline";
@@ -15,26 +15,9 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const BlogBackground = () => (
-  <Box
-    sx={{
-      backgroundImage: "url('https://i.pinimg.com/474x/2b/8c/11/2b8c11ce7a01bf57b95ffcfd60b16553.jpg')",
-      backgroundSize: "cover",
-      height: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-  />
-);
-
-const Blog = ({ title, description, imageURL, userName, isUser, id }) => {
+const Blog = ({ id, userName, title, description, imageURL, isUser }) => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-
-  const handleEdit = () => {
-    navigate(`/myBlogs/${id}`);
-  };
 
   const deleteRequest = async () => {
     try {
@@ -55,53 +38,85 @@ const Blog = ({ title, description, imageURL, userName, isUser, id }) => {
     });
   };
 
+  const handleEdit = () => {
+    navigate(`/edit/${id}`);
+  };
+
   return (
     <>
-      <BlogBackground />
-      <Card
+      <Box
         sx={{
-          width: "40%",
-          margin: "auto",
-          mt: 2,
-          padding: 2,
-          boxShadow: "5px 5px 10px #ccc",
-          ":hover": {
-            boxShadow: "10px 10px 20px #ccc",
-          },
-          bgcolor: "#FEE9E1",
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100vh", // Full viewport height
+          backgroundImage: "url('/path-to-your-background-image.jpg')", // Update this with the actual image URL
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          zIndex: -1, // Send the background behind the content
+        }}
+      />
+      <Box
+        sx={{
+          position: "relative", // Content positioned relative to the background
+          width: "100%", // Full width
+          minHeight: "100vh", // Match the height of the viewport
+          display: "flex", // Flexbox for alignment
+          justifyContent: "center", // Center horizontally
+          alignItems: "center", // Center vertically
+          padding: 0,
+          margin: 0,
         }}
       >
-        {isUser && (
-          <Box display="flex">
-            <IconButton onClick={handleEdit} sx={{ marginLeft: "auto" }}>
-              <ModeEditOutlineIcon color="warning" />
-            </IconButton>
-            <IconButton onClick={handleDelete}>
-              {loading ? (
-                <CircularProgress size={24} />
-              ) : (
-                <DeleteForeverIcon color="error" />
-              )}
-            </IconButton>
-          </Box>
-        )}
-
-        <CardHeader
-          avatar={
-            <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-              {userName ? userName.charAt(0) : ""}
-            </Avatar>
-          }
-          title={title}
-        />
-        <CardMedia component="img" height="194" image={imageURL} alt="Blog Image" />
-        <CardContent>
-          <hr />
-          <Typography variant="body2" color="text.secondary">
-            <b>{userName}</b> {": "} {description}
-          </Typography>
-        </CardContent>
-      </Card>
+        <Card
+          sx={{
+            width: { xs: "90%", sm: "70%", md: "40%" },
+            boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)",
+            bgcolor: "#FEE9E1",
+            borderRadius: 2,
+          }}
+        >
+          {isUser && (
+            <Box display="flex">
+              <IconButton onClick={handleEdit} sx={{ marginLeft: "auto" }}>
+                <ModeEditOutlineIcon color="warning" />
+              </IconButton>
+              <IconButton onClick={handleDelete}>
+                {loading ? (
+                  <CircularProgress size={24} />
+                ) : (
+                  <DeleteForeverIcon color="error" />
+                )}
+              </IconButton>
+            </Box>
+          )}
+          <CardHeader
+            avatar={
+              <Avatar
+                sx={{ bgcolor: "red" }} // Dynamic color based on user preferences
+                aria-label="recipe"
+              >
+                {userName ? userName.charAt(0) : ""}
+              </Avatar>
+            }
+            title={title}
+          />
+          <CardMedia
+            component="img"
+            height="194"
+            image={imageURL}
+            alt="Blog Image"
+            sx={{ objectFit: "cover", borderRadius: "4px" }}
+          />
+          <CardContent>
+            <hr />
+            <Typography variant="body2" color="text.secondary">
+              <b>{userName}</b> {": "} {description}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Box>
     </>
   );
 };
