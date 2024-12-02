@@ -44,6 +44,7 @@ const Blog = ({ id, userName, title, description, imageURL, isUser }) => {
 
   return (
     <>
+      {/* Pastel Teal Blue Blurred Effect */}
       <Box
         sx={{
           position: "absolute",
@@ -51,9 +52,8 @@ const Blog = ({ id, userName, title, description, imageURL, isUser }) => {
           left: 0,
           width: "100%",
           height: "100vh", // Full viewport height
-          backgroundImage: "url('https://i.pinimg.com/736x/47/57/a8/4757a8969c6b038cda876ed64e986c00.jpg')", // Update this with the actual image URL
-          backgroundSize: "cover",
-          backgroundPosition: "center",
+          background: "linear-gradient(120deg, rgba(175, 238, 238, 0.8), rgba(240, 255, 255, 0.8))",
+          filter: "blur(4px)",
           zIndex: -1, // Send the background behind the content
         }}
       />
